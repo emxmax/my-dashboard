@@ -1,18 +1,33 @@
 'use client'
-import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { addOne, initCounterState, substractOne } from "@/store/counter/counterSlice";
+import { useEffect, useState } from "react";
 
-export const CartCounter = () => {
+interface Props{
+    value?: number;
+}
 
-    const [count, setCount] = useState(5);
+export const CartCounter = ({value = 0}: Props) => {
+
+    const count = useAppSelector(state => state.counter.count);
+    const dispatch = useAppDispatch();
+    //const [count, setCount] = useState(5);
+    useEffect(()=> {
+        dispatch(initCounterState(value));
+    }, [dispatch, value])
 
     return (
         <>
             <span className="text-9xl">{count}</span>
             <div className="flex">
-                <button onClick={()=>{setCount(count-1)}} className="flex items-center justify-center p-2 rounded-xl bg-gray-900 text-white hover:bg-gray-600 transition-all w-[100px] mx-2">
+                <button 
+                onClick={()=>dispatch(substractOne())} 
+                className="flex items-center justify-center p-2 rounded-xl bg-gray-900 text-white hover:bg-gray-600 transition-all w-[100px] mx-2">
                 -1
                 </button>
-                <button onClick={()=>{setCount(count+1)}} className="flex items-center justify-center p-2 rounded-xl bg-gray-900 text-white hover:bg-gray-600 transition-all w-[100px] mx-2">
+                <button 
+                onClick={()=>dispatch(addOne())} 
+                className="flex items-center justify-center p-2 rounded-xl bg-gray-900 text-white hover:bg-gray-600 transition-all w-[100px] mx-2">
                 +1
                 </button>
             </div>
